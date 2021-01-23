@@ -3,19 +3,17 @@ title: "Mukta Kelkar"
 image: "DSC_0279.jpg"
 links:
   - label: LinkedIn
-    url: "https://linkedin.com/"
+    url: "https://www.linkedin.com/in/muktakelkar/"
   - label: Twitter
-    url: "https://twitter.com/"
+    url: "https://twitter.com/mukta_kelkar"
   - label: GitHub
-    url: "https://github.com/"
+    url: "https://github.com/mukta-kelkar"
   - label: Email
-    url: "mailto:email@email.com"
+    url: "mailto:muktakelkar@ucsb.edu"
 output:
   postcards::jolla
 site: distill::distill_website  
   
 ---
  
-I am a classically trained data scientist living in the San Francisco Bay Area. 
-Currently I work on the Oculus team at Facebook. I love talking about baseball, 
-true crime podcasts, and causal inference.
+I am a PhD student at the UC Santa Barbara Bren School of Environmental Science and Management. I study the impact of climate change on marine ecology, and am especially passionate about using science to create effective, inclusive, and equitable marine resource management strategies.
