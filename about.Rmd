@@ -1,8 +1,23 @@
 ---
-title: "About this site"
+title: "A Quick Dive into my Life"
 description: |
-  Some additional details about the website
+  (Get it? Because I study the ocean? I'll let myself out)
 ---
+
+## Interests
+
+I'm passionate about using both scientific research and community organizing to create a more just and sustainable world. For my PhD, I'm especially curious to use modeling techniques to understand how changing ocean conditions and shifting prey availability will impact species distribution. My ultimate goal is to use ecosystem models to help create effective, inclusive, and equitable marine resource management strategies. I also enjoy cooking, dancing (currently only in my kitchen but hopefully soon with other people), becoming too invested in fictional stories, and public transportation.
+
+## Projects
+
+### Sunrise Bay Radio
+
+Since May 2020, I've been helping develop and create a podcast for the Bay Area Hub of the Sunrise Movement, called Sunrise Bay Radio. Every month, we explore the intersection of the climate crisis with every aspect of our society, from the COVID-19 pandemic to racial justice. Check it out at [anchor.fm/sunrisebayradio](https://anchor.fm/sunrisebayradio)
+
+### Blue Whales & Navy Sonar
+
+While completing my undergraduate degree at UC San Diego, I worked in the Marine Bioacoustics Lab at Scripps Institution of Oceanography. There I studied blue whale acoustic behavior and looked at the impact of climate change and Navy sonar on blue whale foraging calls.
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
