@@ -3,6 +3,7 @@ title: "Mukta Kelkar"
 description: |
   Mukta Kelkar
 output_dir: "docs"
+theme: theme.css
 navbar:
   right:
     - text: "Home"

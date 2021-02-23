@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/2021-02-20-text-sentiment-analysis/",
+    "title": "Text & Sentiment Analysis",
+    "description": "In Winter 2021, I took an advanced data analysis course through the UCSB Bren School. In that course, I learned how to conduce text and sentiment analyses. I tried out my new skills by analyzing *Pride and Prejudice* by Jane Austen. Check out my analysis below!",
+    "author": [
+      {
+        "name": "Mukta Kelkar",
+        "url": {}
+      }
+    ],
+    "date": "2021-02-20",
+    "categories": [],
+    "contents": "\nStep 1: Get Pride and Prejudice\nI used a .pdf of Pride and Prejudice by Jane Austen from Project Gutenberg’s database of free, publicly available eBooks.\n(For this task, I chose to use the zombies-free version of Pride and Prejudice. I assume including the undead would highlight negative sentiments not expressed in original the text.)\n\n\n\nStep 2: Wrangle the Text\nAfter pulling the .pdf, I used the R packages tidyverse and tidytext to convert the text into a tidy dataframe. I then remove stopwords from the data frame and count the number of times each non-stop word is used.\n\n\n\nStep 3: Visualize the Language\nNext, I used ggplot2 to visualize the top 10 words used in Pride and Prejudice and create a word cloud of the top 100. Since the word “elizabeth” was used much more than any other word (222 more times more than the next most common word, “darcy”), I omitted it from the word cloud.\n\n\n\n\n\n\nStep 4: Sentiment Analysis\nLastly, I use the NRC lexicon to examine the sentiment of the words used in Pride and Prejudice.\n\n\n\nReferences\nAusten, Jane. (1998). Pride and Prejudice. Project Gutenberg. Retrieved February 19, 2021, from https://www.gutenberg.org/ebooks/1342. (originally published 1813).\nCrowdsourcing a Word-Emotion Association Lexicon, Saif Mohammad and Peter Turney, Computational Intelligence, 29 (3), 436-465, 2013.\nDistill is a publication format for scientific and technical writing, native to the web.\nLearn more about using Distill at https://rstudio.github.io/distill.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-02-23T11:45:56-08:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-02-06-welcome/",
     "title": "welcome",
     "description": "A short description of the post.",

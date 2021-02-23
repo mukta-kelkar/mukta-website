@@ -1,0 +1,156 @@
+---
+title: "Text & Sentiment Analysis"
+description: |
+  In Winter 2021, I took an advanced data analysis course through the UCSB Bren School. In that course, I learned how to conduce text and sentiment analyses. I tried out my new skills by analyzing *Pride and Prejudice* by Jane Austen. Check out my analysis below!
+author:
+  - name: Mukta Kelkar
+    url: {}
+date: 02-20-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(here)
+library(tidytext)
+library(textdata)
+library(pdftools)
+library(ggwordcloud)
+library(readtext)
+```
+
+### Step 1: Get *Pride and Prejudice* 
+
+I used a .pdf of *Pride and Prejudice* by Jane Austen from Project Gutenberg's database of free, publicly available eBooks. 
+
+(For this task, I chose to use the zombies-free version of Pride and Prejudice. I assume including the undead would highlight negative sentiments not expressed in original the text.)
+
+```{r read in pdf, cache = TRUE}
+p_and_p_text <- pdf_text("p_and_p.pdf")
+```
+
+### Step 2: Wrangle the Text
+
+After pulling the .pdf, I used the R packages `tidyverse` and `tidytext` to convert the text into a tidy dataframe. I then remove stopwords from the data frame and count the number of times each non-stop word is used. 
+
+```{r put pdf into a tidy dataframe, message = FALSE, warning = FALSE}
+#put pdf into a dataframe
+pandp_df <- data.frame(p_and_p_text) %>%    #save the pdf as a data frame
+  mutate(text_full = str_split(p_and_p_text, pattern = '\\n')) %>%  #create a new column in which every row includes the text on one page
+  unnest(text_full) %>% #unnest the text
+  mutate(text_full = str_trim(text_full))  #trim white space from start and end of each string
+
+#make the dataframe tidy
+pandp_tidy <- pandp_df %>% 
+  slice(-(1:2)) #remove rows that include title and author name
+
+#create a row for every word
+pandp_tokens <- pandp_tidy %>% 
+  mutate(string1 = ifelse(str_detect(text_full, '-$'),
+                          str_replace(text_full, '-$', ''),
+                          str_replace(text_full, '$', ' '))) %>%  #combine lines that split words
+  summarize(string2 = str_c(string1, collapse = '')) %>% 
+  unnest_tokens(word, string2) 
+
+#For this analysis, I will leave chapter numbers and page numbers in dataframe because there aren't enough of them to reach the top word counts anyway
+
+#Remove stop words
+pandp_nonstop <- pandp_tokens %>% 
+  anti_join(stop_words)
+
+#Count the number of every word
+nonstop_counts <- pandp_nonstop %>% 
+  count(word) %>% 
+  arrange(-n)   #order the words from most used to least used
+```
+
+### Step 3: Visualize the Language
+
+Next, I used `ggplot2` to visualize the top 10 words used in *Pride and Prejudice* and create a word cloud of the top 100. Since the word "elizabeth" was used much more than any other word (222 more times more than the next most common word, "darcy"), I omitted it from the word cloud.
+
+```{r column graph, message = FALSE, warning = FALSE}
+#Make a dataframe of the top 10 words in the whole book
+top_10_words <- nonstop_counts %>%
+  slice(1:10)
+
+#Make a column graph
+ggplot(data = top_10_words, aes(x = reorder(word, -n), y =n)) +
+  geom_col(fill = "slateblue1") +
+  labs(
+    x = "Word",
+    y = "Count",
+    title = "10 most used words in Pride and Prejudice",
+    caption = "Fig. 1: Most of the 10 most used words are names of the main characters."
+  ) +
+  theme_classic()
+
+```
+
+
+```{r word cloud, message = FALSE, warning = FALSE}
+#Make a dataframe of the top 150 words in the whole book
+top_100 <- nonstop_counts %>% 
+  arrange(-n) %>%    #arrange in decending order by count
+  slice(1:101) %>%         #keep only the top 101 words
+  filter(!word == "elizabeth")  #take out main character's name
+
+#Make a wordcloud
+ggplot(data = top_100, aes(label = word)) +
+  geom_text_wordcloud(aes(color = n, size = n)) +
+  scale_size_area(max_size = 7) +
+  scale_color_gradientn(colors = c("violetred", "slateblue1", "royalblue4")) +
+  labs(
+    title = "Top 100 Words in Pride and Prejudice",
+    subtitle = "Does not include 'elizabeth', the most used word.",
+    caption = "Fig. 2: The most used words include main characters and describe the themes of the book; familial and romantic love."
+  ) +
+  theme_minimal()
+  
+```
+
+### Step 4: Sentiment Analysis
+
+Lastly, I use the NRC lexicon to examine the sentiment of the words used in *Pride and Prejudice*.
+
+```{r sentiment analysis, message=FALSE, warning=FALSE}
+#Assign a sentiment to every non-stop word in Pride and Prejudice
+pandp_sentiment <- pandp_nonstop %>% 
+  inner_join(get_sentiments("nrc"))
+
+#Count number of times each sentiment occurs
+nrc_counts <- pandp_sentiment %>% 
+  count(sentiment) %>% 
+  arrange(-n)  #arrange in decending order
+
+#Make a column graph
+ggplot(data = nrc_counts, aes(x = reorder(sentiment, -n), y = n)) +
+  geom_col(fill = "slateblue1") +
+  labs(
+    title = "Sentiment Analysis of Pride and Prejudice",
+    subtitle = "Analysis conducted using the NRC Lexicon",
+    caption = "The books leans towards mostly positive sentiments.",
+    x = "Sentiment",
+    y = "Count"
+  ) +
+  theme_classic()
+
+
+```
+
+### References
+
+Austen, Jane. (1998). *Pride and Prejudice.* Project Gutenberg. Retrieved February 19, 2021, from https://www.gutenberg.org/ebooks/1342. (originally published 1813).
+
+Crowdsourcing a Word-Emotion Association Lexicon, Saif Mohammad and Peter Turney, Computational Intelligence, 29 (3), 436-465, 2013.
+
+------
+
+Distill is a publication format for scientific and technical writing, native to the web.
+
+Learn more about using Distill at <https://rstudio.github.io/distill>.
+
+
