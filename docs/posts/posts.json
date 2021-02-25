@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/2021-02-25-working-with-rasters/",
+    "title": "Working with Rasters",
+    "description": "Last post I wanted to share my coding skills with shapefiles, and today I want to share my skills working wtih rasters. In the following post, I wrangle cetacean probability raster data from AquaMaps to create a map of cetacean species richness off the coast of California.",
+    "author": [
+      {
+        "name": "Mukta Kelkar",
+        "url": {}
+      }
+    ],
+    "date": "2021-02-25",
+    "categories": [],
+    "contents": "\nStep 1: Read in Data\nFirst I read in all the CA cetacean .tif files from AquaMaps and save them as a RasterStack using raster. The data shows the probability of occurrence of 35 cetacean species that can be found along the California coast. I also read in a shapefile of countries of the world using rnaturalearth.\n\n\n\nStep 2: Filer the Data\nNext I filter the probability data using a manually created filter function. I filter the data so that if the probability of occurrence is greater than or equal to 0.75, the cetacean species is logged as being present in that raster square. I then add up all the filtered rasters to create one RasterLayer.\n\n\n\nStep 3: Create a Static Map\nLastly I use ggplot2 and rnaturalearth to create a map of the cetacean species richness along the coast of California.\n\n\n\nDistill is a publication format for scientific and technical writing, native to the web.\nLearn more about using Distill at https://rstudio.github.io/distill.\n\n\n\n",
+    "preview": "posts/2021-02-25-working-with-rasters/working-with-rasters_files/figure-html5/unnamed-chunk-3-1.png",
+    "last_modified": "2021-02-25T10:55:24-08:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-02-24-oil-spill-spatial-analysis/",
     "title": "Oil Spill Spatial Analysis",
     "description": "Another example of my coding skills I'm excited to share are my spatial maping skills using shapefiles. The following is also an assignment from my advanced data analysis course.",

@@ -1,0 +1,101 @@
+---
+title: "Working with Rasters"
+description: |
+  Last post I wanted to share my coding skills with shapefiles, and today I want to share my skills working wtih rasters. In the following post, I wrangle cetacean probability raster data from AquaMaps to create a map of cetacean species richness off the coast of California.
+author:
+  - name: Mukta Kelkar
+    url: {}
+date: 02-25-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(raster)  
+library(tidyverse)
+library(here)
+library(rnaturalearth)
+```
+
+### Step 1: Read in Data
+
+First I read in all the CA cetacean .tif files from AquaMaps and save them as a RasterStack using `raster`. The data shows the probability of occurrence of 35 cetacean species that can be found along the California coast.  I also read in a shapefile of countries of the world using `rnaturalearth`.
+
+```{r}
+#Pull all .tif files from folder
+my_files <- list.files(path = "ca_cetaceans", full.names = TRUE)
+
+#Use `raster::stack` to rasterize all the layers at once
+cetacean_stack <- raster::stack(my_files)
+
+#Read in shapefile using `rnaturalearth`
+coastline <- ne_countries(scale = 110, returnclass = "sf")
+
+#View data
+#cetacean_stack
+#summary(cetacean_stack)
+
+#Preliminary visualization of data
+#plot(cetacean_stack)
+
+```
+
+### Step 2: Filer the Data
+
+Next I filter the probability data using a manually created filter function. I filter the data so that if the probability of occurrence is greater than or equal to `0.75`, the cetacean species is logged as being present in that raster square. I then add up all the filtered rasters to create one RasterLayer.
+
+```{r}
+#Create a filter function 
+is_present <- function(x, thresh = 0.75) {
+    y <- ifelse(x >= thresh, 1, NA)
+    return(y)
+}
+
+#filter the raster
+cetacean_present <- calc(cetacean_stack, fun = is_present)
+
+#add up all the raster layers
+cetacean_prob <- calc(cetacean_present, fun = sum, na.rm = TRUE)
+
+#change the initial raster into a dataframe
+cetacean_stack_df <- raster::rasterToPoints(cetacean_stack) %>%
+  as.data.frame()
+
+#change the filtered raster layer into a dataframe
+cetacean_prob_df <- raster::rasterToPoints(cetacean_prob) %>%
+  as.data.frame()
+
+#cetecean_prob_df[is.na(cetecean_prob_df[])] <- 0
+```
+
+### Step 3: Create a Static Map
+
+Lastly I use `ggplot2` and `rnaturalearth` to create a map of the cetacean species richness along the coast of California.
+
+```{r}
+ggplot() +
+  geom_raster(data = cetacean_prob_df, aes(x = x, y = y, fill = layer)) +
+  geom_sf(data = coastline) +
+  coord_sf(expand = 0, xlim = c(-130,-110), ylim = c(28,45)) +
+  scale_fill_gradient2(low = 'yellow', mid = "red", high =  'purple', midpoint = 13) +
+  labs(
+    x = "Latitude",
+    y = "Longitude",
+    fill = "Species Richness",
+    title = "Cetacean species richness along the California coast",
+    caption = "Fig. 1: Cetacean species richness calculated using a 0.75 probability threshold."
+  ) +
+  theme_minimal()
+  
+```
+
+
+---
+Distill is a publication format for scientific and technical writing, native to the web.
+
+Learn more about using Distill at <https://rstudio.github.io/distill>.
+
+
