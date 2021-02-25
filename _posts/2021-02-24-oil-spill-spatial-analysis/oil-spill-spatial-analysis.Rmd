@@ -1,0 +1,118 @@
+---
+title: "Oil Spill Spatial Analysis"
+description: |
+  Another example of my coding skills I'm excited to share are my spatial maping skills using shapefiles. The following is also an assignment from my advanced data analysis course.
+author:
+  - name: Mukta Kelkar
+    url: {}
+date: 02-24-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(here)
+library(sf)
+library(janitor)
+library(tmap)
+```
+
+### Step 1: Read in data
+
+First, I use the `sf` and `here` packages to read in shapefiles of the State of California and Oil Spill Incident Tracking data. I then use `st_transform` to make sure both shapefiles have the same CRS. 
+
+```{r read in data, cache = TRUE, message = FALSE, warning = FALSE}
+#Read in oil spill layer
+ds394 <- read_sf("ds394", layer = "ds394") %>% 
+  clean_names()
+
+#Check the projection:
+#st_crs(ds394) #NAD83
+
+# Read in the CA county data (TIGER shapefile):
+ca_counties <- read_sf("ca_counties", layer = "CA_Counties_TIGER2016") %>% 
+  clean_names()
+
+#Check the projection:
+#st_crs(ca_counties) #WGS 84
+
+#Make ca_counties match the projection of ds394
+ca_counties <- st_transform(ca_counties, st_crs(ds394))
+
+#confirm that the projection is updated
+#st_crs(ca_counties) #NAD83 confirmed
+
+#Make a quick exploratory ggplot
+#ggplot() +
+  #geom_sf(data = ca_counties) +
+  #geom_sf(data = ds394)
+```
+
+### Step 2: Make an Interactive Map
+
+I used `tmap` to create an exploratory interactive map of oil spills in California.
+
+```{r interactive map, message = FALSE, warning = FALSE}
+#Set tmap mode to interactive viewing
+tmap_mode("view")
+
+#Create exploratory interactive map
+tm_shape(ds394) +
+  tm_dots("localecoun") #dots are colored based on the county the spill occured in
+```
+
+### Step 3: Make a chloropleth map
+
+Here I use `ggplot2` and `sf` to create a chloropleth map to visualize the number of inland oil spill events in every county in California.
+
+```{r cloropleth map, message = FALSE, warning = FALSE}
+#assume no duplicate oil spill events
+
+#make a subset of relevant ca county data
+ca_subset <- ca_counties %>% 
+  select(name) %>%     #select variable of interest
+  rename(county_name = name) #rename variable
+
+#make a subset of relevant oil spill data
+oil_subset <- ds394 %>% 
+  select(localecoun, inlandmari) %>% #select variables of interest
+  filter(inlandmari == "Inland") %>%  #filter dataset to only include inland observations
+  rename(county_name = localecoun)  #rename county column to match ca_subset
+
+#Join the oil spill and ca county datasets by variable `county_name`
+ca_oil <- ca_subset %>% 
+  st_join(oil_subset)
+
+#Find count of oil spills observed by county. 
+oil_counts <- ca_oil %>% 
+  count(county_name.y)
+
+#Create chloropleth map using ggplot
+ggplot(data = oil_counts) +
+  geom_sf(aes(fill = n), color = "gray100", size = 0.05) +
+  scale_fill_gradientn(colors = c("gray90", "gray0")) +
+  theme_minimal() +
+  labs(fill = "Number of Oil Spills",
+       title = "Inland Oil Spills in California Counties",
+       caption = "Los Angeles County has the most oil spills out of all the CA Counties.")
+  
+```
+
+### References
+
+California Department of Fish and Game, Office of Spill Prevention and Response. (2009). Oil Spill Incident Tracking [ds394]. California Department of Fish and Game. Available at: [https://map.dfg.ca.gov/metadata/ds0394.html](https://map.dfg.ca.gov/metadata/ds0394.html)   
+
+US Census Bureau, Department of Commerce. (2016). CA Counties TIGER Line Shapefile.
+
+
+---
+
+Distill is a publication format for scientific and technical writing, native to the web.
+
+Learn more about using Distill at <https://rstudio.github.io/distill>.
+
+
