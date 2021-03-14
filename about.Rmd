@@ -22,11 +22,3 @@ While completing my undergraduate degree at UC San Diego, I worked in the Marine
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
-
-## My CV
-
-Please find my CV below.
-
-```{r echo = FALSE, message=FALSE, fig.align='center', fig.pos='H', out.width = "800px", out.height = "1100px"}
-knitr::include_graphics("./docs/my_resume.pdf")
-```
