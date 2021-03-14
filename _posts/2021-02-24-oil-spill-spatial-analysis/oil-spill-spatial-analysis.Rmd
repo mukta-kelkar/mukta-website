@@ -27,7 +27,7 @@ library(sp)
 
 First, I use the `sf` and `here` packages to read in shapefiles of the State of California and Oil Spill Incident Tracking data. I then use `st_transform` to make sure both shapefiles have the same CRS. 
 
-```{r read in data, cache = TRUE, message = FALSE, warning = FALSE}
+```{r read in data, cache = TRUE, message = FALSE, warning = FALSE, results='hide'}
 #Read in oil spill layer
 ds394 <- st_read("ds394", layer = "ds394") %>% 
   clean_names()
