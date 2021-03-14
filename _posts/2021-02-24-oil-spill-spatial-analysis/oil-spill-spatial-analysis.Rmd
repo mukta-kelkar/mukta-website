@@ -9,6 +9,7 @@ date: 02-24-2021
 output:
   distill::distill_article:
     self_contained: false
+    code_folding: true
 ---
 
 
@@ -19,6 +20,7 @@ library(here)
 library(sf)
 library(janitor)
 library(tmap)
+library(sp)
 ```
 
 ### Step 1: Read in data
@@ -27,14 +29,14 @@ First, I use the `sf` and `here` packages to read in shapefiles of the State of 
 
 ```{r read in data, cache = TRUE, message = FALSE, warning = FALSE}
 #Read in oil spill layer
-ds394 <- read_sf("ds394", layer = "ds394") %>% 
+ds394 <- st_read("ds394", layer = "ds394") %>% 
   clean_names()
 
 #Check the projection:
 #st_crs(ds394) #NAD83
 
 # Read in the CA county data (TIGER shapefile):
-ca_counties <- read_sf("ca_counties", layer = "CA_Counties_TIGER2016") %>% 
+ca_counties <- st_read("ca_counties", layer = "CA_Counties_TIGER2016") %>% 
   clean_names()
 
 #Check the projection:
