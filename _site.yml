@@ -13,5 +13,5 @@ navbar:
     - text: "Blog"
       href: blog.html
     - text: "CV"
-      href: CV/my_academic_cv.pdf
+      href: CV/mukta_kelkar_cv.pdf
 output: distill::distill_article
