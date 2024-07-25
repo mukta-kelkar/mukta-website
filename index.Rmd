@@ -1,19 +1,15 @@
 ---
 title: "Mukta Kelkar"
 image: "DSC_0279.jpg"
-links:
-  - label: LinkedIn
-    url: "https://www.linkedin.com/in/muktakelkar/"
-  - label: Twitter
-    url: "https://twitter.com/mukta_kelkar"
-  - label: GitHub
-    url: "https://github.com/mukta-kelkar"
-  - label: Email
-    url: "mailto:muktakelkar@ucsb.edu"
 output:
-  postcards::jolla
+  postcards::solana
 site: distill::distill_website  
   
 ---
- 
-I am a PhD student at the UC Santa Barbara Bren School of Environmental Science and Management. I study the impact of climate change on marine ecology, and am especially passionate about using science to create effective, inclusive, and equitable marine resource management strategies.
+
+I am a PhD student at the UC Santa Barbara Bren School of Environmental Science and Management. I study how to plan Marine Protected Areas for climate change. 
+
+## Education
+**Ph.D. (in progress) from University of California, Santa Barbara Bren School of Environmental Science & Management** | 2020 - present
+
+**B.S. from University of California, San Diego** | 2013 - 2017
