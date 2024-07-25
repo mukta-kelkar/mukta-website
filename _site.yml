@@ -14,7 +14,7 @@ navbar:
       href: CV/mukta_kelkar_cv.pdf {target = "_blank"}
   right:
     - icon: fa fa-twitter
-      href: (https://twitter.com/mukta_kelkar){:target="_blank"} 
+      href: https://twitter.com/mukta_kelkar{:target="_blank"} 
     - icon: fa fa-linkedin
       href: (https://www.linkedin.com/in/muktakelkar/){:target="_blank"} 
     - icon: fa fa-github
