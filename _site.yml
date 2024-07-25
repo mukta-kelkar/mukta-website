@@ -8,17 +8,15 @@ navbar:
   left:
     - text: "Research"
       href: research.html
-   # - text: "Blog"
-   #   href: blog.html
     - text: "Community Involvement"
       href: community.html
     - text: "CV"
       href: CV/mukta_kelkar_cv.pdf {target = "_blank"}
   right:
     - icon: fa fa-twitter
-      href: https://twitter.com/mukta_kelkar 
+      href: (https://twitter.com/mukta_kelkar){:target="_blank"} 
     - icon: fa fa-linkedin
-      href: https://www.linkedin.com/in/muktakelkar/ 
+      href: (https://www.linkedin.com/in/muktakelkar/){:target="_blank"} 
     - icon: fa fa-github
-      href: https://github.com/mukta-kelkar 
+      href: (https://github.com/mukta-kelkar){:target="_blank"} 
 output: distill::distill_article
